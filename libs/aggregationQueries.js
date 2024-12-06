@@ -8,8 +8,8 @@ const getMembersByStatus = async (status) => {
         return snapshot.data().count;
     } catch (error) {
         console.error(`Failed to fetch alive members: ${status}: `, error);
-    }
-}
+    };
+};
 
 const getAliveAndDeadMembers = async () => {
     try {
@@ -18,8 +18,8 @@ const getAliveAndDeadMembers = async () => {
         return { aliveMembers, deadMembers };
     } catch (error) {
         console.error('Failed to fetch alive and deceased members:', error);
-    }
-}
+    };
+};
 
 const getMembersByPosition = async (status) => {
     try {
@@ -29,8 +29,8 @@ const getMembersByPosition = async (status) => {
         return snapshot.data().count;
     } catch (error) {
         console.error(`Failed to fetch alive members: ${status}: `, error);
-    }
-}
+    };
+};
 
 const getTotalFuneralFee = async (status) => {
     try {
@@ -41,8 +41,8 @@ const getTotalFuneralFee = async (status) => {
         return snapshot.data().totalFeesTaken;
     } catch (error) {
         console.error(`Failed to fetch total fees taken: ${status}: `, error);
-    }
-}
+    };
+};
 
 const getSubFamilies = async () => {
     try {
@@ -54,7 +54,20 @@ const getSubFamilies = async () => {
         return subFamilies;
     } catch (error) {
         console.error(`Failed to fetch sub families: `, error);
-    }
-}
+    };
+};
 
-export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies }
+const getSuperFamily = async () => {
+    try {
+        const targetDocument = await(getDocs(collection(FIREBASE_FIRESTORE, 'superFamily')))
+        const superFamily = targetDocument.docs.map(doc => ({
+            value: doc.id,
+            label: doc.data().superFamilyName
+        }));
+        return superFamily;
+    }catch (error){
+        console.error('Failed to fetch Super Family', error);
+    };
+};
+
+export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily };

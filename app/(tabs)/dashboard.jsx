@@ -11,6 +11,32 @@ import { images} from '../../constants';
 
 const DATA = [
   {
+    title: 'Super Family Information',
+    data: [
+      {
+        title: 'Add Super Family',
+        link: 'addSuperFamily',
+      },
+      {
+        title: 'View Super Families',
+        link: 'viewSuperFamilies',
+      },
+    ],
+  },
+  {
+    title: 'Sub Family Information',
+    data: [
+      {
+        title: 'Add Sub Family',
+        link: 'addSubFamily',
+      },
+      {
+        title: 'View Sub Families',
+        link: 'viewSubFamilies',
+      },
+    ],
+  },
+  {
     title: 'Family Information',
     data: [
       {
@@ -46,32 +72,6 @@ const DATA = [
       {
         title: 'View Funeral Fees',
         link: 'viewFuneralFees',
-      },
-    ],
-  },
-  {
-    title: 'Sub Family Information',
-    data: [
-      {
-        title: 'Add Sub Family',
-        link: 'addSubFamily',
-      },
-      {
-        title: 'View Sub Families',
-        link: 'viewSubFamilies',
-      },
-    ],
-  },
-  {
-    title: 'Super Family Information',
-    data: [
-      {
-        title: 'Add Super Family',
-        link: 'addSuperFamily',
-      },
-      {
-        title: 'View Super Families',
-        link: 'viewSuperFamilies',
       },
     ],
   },
