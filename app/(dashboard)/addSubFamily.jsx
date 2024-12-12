@@ -64,7 +64,6 @@ const AddSubFamily = () => {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         }
-        getSuperFamily();
         try {
           if (validateFields()) {
             setLoading(true);

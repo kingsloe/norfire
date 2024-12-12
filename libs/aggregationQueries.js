@@ -24,7 +24,7 @@ const getAliveAndDeadMembers = async () => {
 const getMembersByPosition = async (status) => {
     try {
         const targetDocument = collection(FIREBASE_FIRESTORE, 'familyMembers');
-        const querySnapshot = query(targetDocument, where('position', 'in', ['Committee Head', 'Committee Member']));
+        const querySnapshot = query(targetDocument, where('position', 'in', ['member_of_committee', 'head_of_committee']));
         const snapshot = await getCountFromServer(querySnapshot);
         return snapshot.data().count;
     } catch (error) {
@@ -59,15 +59,41 @@ const getSubFamilies = async () => {
 
 const getSuperFamily = async () => {
     try {
-        const targetDocument = await(getDocs(collection(FIREBASE_FIRESTORE, 'superFamily')))
+        const targetDocument = await getDocs(collection(FIREBASE_FIRESTORE, 'superFamily'));
         const superFamily = targetDocument.docs.map(doc => ({
             value: doc.id,
             label: doc.data().superFamilyName
         }));
         return superFamily;
     }catch (error){
-        console.error('Failed to fetch Super Family', error);
+        console.error('Failed to fetch Super Family ', error);
     };
 };
 
-export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily };
+const getDeadMembers = async () => {
+    try{
+        const targetDocument = await query(getDocs(collection(FIREBASE_FIRESTORE, 'familyMembers'), where('isAlive', '==', false)));
+        const deadMembers = targetDocument.docs.map(doc => ({
+            value: doc.id,
+            label: doc.data().firstName + ' ' + doc.data().lastName
+        }));
+        return deadMembers; 
+    } catch (error) {
+        console.error('Failed to get Dead Members ', error);
+    }
+};
+
+const getCommitteeMembers = async () => {
+    try {
+        const targetDocument = await query(getDocs(collection(FIREBASE_FIRESTORE, 'familyMembers'), where('position', 'in', ['member_of_committee', 'head_of_committee'])));
+        const committeeMembers = targetDocument.docs.map(doc => ({
+            value: doc.id,
+            label: doc.data().firstName + ' ' + doc.data().lastName
+        }));
+        return committeeMembers
+    } catch (error) {
+        console.error('Failed to get committee members ', error);
+    }
+}
+
+export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily, getDeadMembers, getCommitteeMembers };

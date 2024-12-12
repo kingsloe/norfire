@@ -24,7 +24,7 @@ const PickerField = ({title, value, items, handleChangeText, ...props}) => {
 		    </View>
         </View>
 	)
-}
+};
 
 export default PickerField;
 
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     picker: {
     	borderWidth: 2,
     	borderRadius: 16,
-    	
     },
     
-})
+});

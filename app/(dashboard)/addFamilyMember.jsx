@@ -14,8 +14,8 @@ import { getAuth } from 'firebase/auth';
 const { height } = Dimensions.get('window');
 
 const STATUS = [
-    { value: 'alive', label: 'Alive' },
-    { value: 'dead', label: 'Dead' },
+    { value: true, label: 'Alive' },
+    { value: false, label: 'Dead' },
 ];
 
 const GENDER = [
