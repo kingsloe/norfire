@@ -48,6 +48,7 @@ const AddFamilyMember = () => {
       position: '',
       isAlive: '',
       gender: '',
+      balance: '',
       contact: '',
     });
 
@@ -74,6 +75,14 @@ const AddFamilyMember = () => {
             alert('Last name is required');
             return false;
         }
+        if (form.contact.trim() === '') {
+            alert('Contact is required');
+            return false;
+        }
+        if (form.balance.trim() === '') {
+            alert('Balance is required');
+            return false;
+        }
         if (form.subFamily.trim() === '') {
             alert('Sub family is required');
             return false;
@@ -88,10 +97,6 @@ const AddFamilyMember = () => {
         }
         if (form.gender.trim() === '') {
             alert('Gender is required');
-            return false;
-        }
-        if (form.contact.trim() === '') {
-            alert('Contact is required');
             return false;
         }
         if (form.contact.length !== 10){
@@ -110,6 +115,7 @@ const AddFamilyMember = () => {
             position: form.position,
             isAlive: form.isAlive,
             gender: form.gender,
+            balance: parseInt(form.balance),
             contact: form.contact,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
@@ -172,6 +178,20 @@ const AddFamilyMember = () => {
                         placeholder='Enter Last name'
                         handleChangeText={(e) => setForm({ ...form, lastName: e })}
                     />
+                    <FormField 
+                        title='Contact'
+                        otherStyles={{ marginTop: 20 }}
+                        value={form.contact}
+                        placeholder='Enter Contact'
+                        handleChangeText={(e) => setForm({ ...form, contact: e })}
+                    />
+                    <FormField 
+                        title='Balance'
+                        otherStyles={{ marginTop: 20 }}
+                        value={form.balance}
+                        placeholder='Enter Balance'
+                        handleChangeText={(e) => setForm({ ...form, balance: e })}
+                    />
                     <PickerField 
                         title="Sub Family"
                         value={form.subFamily}
@@ -195,13 +215,6 @@ const AddFamilyMember = () => {
                         value={form.gender || []}
                         items={genderList}
                         handleChangeText={(value) => setForm({ ...form, gender: value })}
-                    />
-                    <FormField 
-                        title='Contact'
-                        otherStyles={{ marginTop: 20 }}
-                        value={form.contact}
-                        placeholder='Enter Contact'
-                        handleChangeText={(e) => setForm({ ...form, contact: e })}
                     />
                     <View style={styles.submitButtonContainer}>
                     <CustomButton

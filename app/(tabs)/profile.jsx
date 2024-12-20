@@ -25,6 +25,7 @@ export default function Profile () {
         <View style={styles.container}>
           <View style={styles.profileInfo}>
             <Avatar 
+              initial = 'NY'
               otherStyles = {{ padding: 45, borderRadius: 80, fontSize: 50, fontWeight: '500' }}
             />
             <Text style={{fontSize: 30, fontWeight: 'bold', color: '#283033'}}>Nana Yaw</Text>

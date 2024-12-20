@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-export default function Avatar ({otherStyles}) {
+export default function Avatar ({otherStyles, initial}) {
     return (
         <TouchableOpacity onPress={() => router.push('/profile')}>
-            <Text style={[styles.avatar, otherStyles]}>NY</Text>
+            <Text style={[styles.avatar, otherStyles]}>{initial}</Text>
         </TouchableOpacity>
     )
 }

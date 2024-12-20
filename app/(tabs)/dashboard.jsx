@@ -8,21 +8,22 @@ import CustomButton from '../../components/CustomButton';
 import StatisticsCard from '../../components/StatisticsCard';
 import Avatar from '../../components/Avatar';
 import { images} from '../../constants';
+import { getAuth } from 'firebase/auth';
 
 const DATA = [
-  {
-    title: 'Super Family Information',
-    data: [
-      {
-        title: 'Add Super Family',
-        link: 'addSuperFamily',
-      },
-      {
-        title: 'View Super Families',
-        link: 'viewSuperFamilies',
-      },
-    ],
-  },
+  // {
+  //   title: 'Super Family Information',
+  //   data: [
+  //     {
+  //       title: 'Add Super Family',
+  //       link: 'addSuperFamily',
+  //     },
+  //     {
+  //       title: 'View Super Families',
+  //       link: 'viewSuperFamilies',
+  //     },
+  //   ],
+  // },
   {
     title: 'Sub Family Information',
     data: [
@@ -78,6 +79,8 @@ const DATA = [
 ];
 
 export default function Dashboard () {
+    const loggedInUser = getAuth().currentUser.email[0].toUpperCase();
+
 
   return (
     <SafeAreaView>
@@ -104,6 +107,7 @@ export default function Dashboard () {
               />
               <Avatar 
                 otherStyles={styles.avatar}
+                initial = {loggedInUser}
               />
             </View>
             <View style={styles.dashboardStyle}>
@@ -137,10 +141,13 @@ const styles = StyleSheet.create({
     height: 54,
   },
   avatar: {
-    padding: 12,
-    borderRadius: 50,
-    fontWeight: '500',
+    paddingHorizontal: 15,
+    paddingVertical: 7,
+    borderRadius: 20,
+    fontWeight: 'bold',
     fontSize: 18,
+    width: 42,
+    height: 42,
   },
   dashboardStyle: {
     paddingVertical: 10,

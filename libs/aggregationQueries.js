@@ -1,4 +1,4 @@
-import { getCountFromServer, query, collection, where, getAggregateFromServer, sum, getDocs } from "firebase/firestore";
+import { getCountFromServer, query, collection, where, getAggregateFromServer, sum, getDocs, doc, getDoc } from "firebase/firestore";
 import { FIREBASE_FIRESTORE } from "../services/firebaseConfig";
 const getMembersByStatus = async (status) => {
     try {
@@ -72,7 +72,12 @@ const getSuperFamily = async () => {
 
 const getDeadMembers = async () => {
     try{
-        const targetDocument = await query(getDocs(collection(FIREBASE_FIRESTORE, 'familyMembers'), where('isAlive', '==', false)));
+        const targetDocument = await getDocs(
+            query(
+                collection(FIREBASE_FIRESTORE, 'familyMembers'), 
+                where('isAlive', '==', false)
+            )
+        );
         const deadMembers = targetDocument.docs.map(doc => ({
             value: doc.id,
             label: doc.data().firstName + ' ' + doc.data().lastName
@@ -83,9 +88,33 @@ const getDeadMembers = async () => {
     }
 };
 
+const getAliveMembers = async () => {
+    try{
+        const targetDocument = await getDocs(
+            query(
+                collection(FIREBASE_FIRESTORE, 'familyMembers'), 
+                where('isAlive', '==', true)
+            )
+        );
+        const aliveMembers = targetDocument.docs.map(doc => ({
+            value: doc.id,
+            label: `${doc.data().firstName} ${doc.data().lastName}`,
+            subFamilyId: doc.data().subFamily
+        }))
+        return aliveMembers; 
+    } catch (error) {
+        console.error('Failed to get alive members ', error);
+    }
+};
+
 const getCommitteeMembers = async () => {
     try {
-        const targetDocument = await query(getDocs(collection(FIREBASE_FIRESTORE, 'familyMembers'), where('position', 'in', ['member_of_committee', 'head_of_committee'])));
+        const targetDocument = await getDocs(
+            query(
+                collection(FIREBASE_FIRESTORE, 'familyMembers'), 
+                where('position', 'in', ['member_of_committee', 'head_of_committee'])
+            )
+        );
         const committeeMembers = targetDocument.docs.map(doc => ({
             value: doc.id,
             label: doc.data().firstName + ' ' + doc.data().lastName
@@ -96,4 +125,4 @@ const getCommitteeMembers = async () => {
     }
 }
 
-export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily, getDeadMembers, getCommitteeMembers };
+export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily, getDeadMembers, getCommitteeMembers, getAliveMembers };
