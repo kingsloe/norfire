@@ -1,14 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
+    StyleSheet,
+    SafeAreaView,
+    View,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Image,
 } from 'react-native';
+import { router } from 'expo-router'
 import FeatherIcon from '@expo/vector-icons/Feather';
 import { getAliveMembers, getSubFamilies } from '../../libs/aggregationQueries';
 
@@ -98,13 +99,12 @@ export default function viewFamilyMember() {
 
         <ScrollView contentContainerStyle={styles.searchContent} keyboardDismissMode='on-drag'>
           {filteredRows.length ? (
-            filteredRows.map(({ label, subFamilyName }, index) => {
+            filteredRows.map(({ label, subFamilyName, value }, index) => {
               return (
                 <View key={index} style={styles.cardWrapper}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // handle onPress
-                    }}>
+                    <TouchableOpacity onPress={() =>
+                        router.push(`/membersDetails/${value}`)
+                    }> 
                     <View style={styles.card}>
                         <View style={[styles.cardImg, styles.cardAvatar]}>
                             <Text style={styles.cardAvatarText}>{label[0]}</Text>
@@ -120,7 +120,8 @@ export default function viewFamilyMember() {
                         <FeatherIcon
                           color="#9ca3af"
                           name="chevron-right"
-                          size={22} />
+                          size={22} 
+                        />
                       </View>
                     </View>
                   </TouchableOpacity>

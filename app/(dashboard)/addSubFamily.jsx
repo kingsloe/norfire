@@ -76,24 +76,18 @@ const AddSubFamily = () => {
           });  
           setLoading(false);
           }
-        } catch (submitError) {
-            if (submitError.response) {
-                console.error('Failed to add Super Family', submitError.response.data);
-            } else if (submitError.request) {
-                console.error('No response from the server. Network issue or server is down.');
-            } else {
-                console.error('Error during request setup', submitError.message);
-            }
+        } catch (error) {
+            console.error("Couln't submit data: ", error)
         } finally {
           setLoading(false);
         }
     };
 
     const handleSubmitAndExit = () => {
-      if (validateFields()){
-        handleSubmit();
-        router.push('/dashboard');
-      }
+        if (validateFields()){
+            handleSubmit();
+            router.push('/dashboard');
+        }
     }
 
     return (
@@ -109,14 +103,14 @@ const AddSubFamily = () => {
                         title='Family Name'
                         otherStyles={{ marginTop: 20 }}
                         value={form.subFamilyName}
-                        placeholder='Enter First name'
+                        placeholder='Enter Family name'
                         handleChangeText={(e) => setForm({ ...form, subFamilyName: e })}
                     />
                     <FormField 
                         title='Sub Family Head'
                         otherStyles={{ marginTop: 20 }}
                         value={form.subFamilyHeadName}
-                        placeholder='Enter First name'
+                        placeholder='Enter Family Head'
                         handleChangeText={(e) => setForm({ ...form, subFamilyHeadName: e })}
                     />
                     <PickerField 

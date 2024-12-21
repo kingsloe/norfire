@@ -125,4 +125,31 @@ const getCommitteeMembers = async () => {
     }
 }
 
-export { getAliveAndDeadMembers, getMembersByPosition, getTotalFuneralFee, getSubFamilies, getSuperFamily, getDeadMembers, getCommitteeMembers, getAliveMembers };
+const getFamilyMemberDetails = async (familyMemberId) => {
+    try{
+        const targetDocument = await getDoc(
+            doc(FIREBASE_FIRESTORE, 'familyMembers', familyMemberId)
+        );
+        if (targetDocument.exists()) {
+            return {id: targetDocument.id, ...targetDocument.data()};
+        }else {
+            console.error("No such document!");
+            return null;
+        }
+    }catch (error) {
+        console.log('Failed to get member details ', error);
+        return null;
+    }
+}
+
+export { 
+    getAliveAndDeadMembers, 
+    getMembersByPosition, 
+    getTotalFuneralFee, 
+    getSubFamilies, 
+    getSuperFamily, 
+    getDeadMembers, 
+    getCommitteeMembers, 
+    getAliveMembers, 
+    getFamilyMemberDetails 
+};
