@@ -11,19 +11,19 @@ import { images} from '../../constants';
 import { getAuth } from 'firebase/auth';
 
 const DATA = [
-  {
-    title: 'Super Family Information',
-    data: [
-      {
-        title: 'Add Super Family',
-        link: 'addSuperFamily',
-      },
-      {
-        title: 'View Super Families',
-        link: 'viewSuperFamilies',
-      },
-    ],
-  },
+  // {
+  //   title: 'Super Family Information',
+  //   data: [
+  //     {
+  //       title: 'Add Super Family',
+  //       link: 'addSuperFamily',
+  //     },
+  //     {
+  //       title: 'View Super Families',
+  //       link: 'viewSuperFamilies',
+  //     },
+  //   ],
+  // },
   {
     title: 'Sub Family Information',
     data: [

@@ -49,7 +49,8 @@ const getSubFamilies = async () => {
         const targetDocument = await getDocs(collection(FIREBASE_FIRESTORE, 'subFamilies'));
         const subFamilies = targetDocument.docs.map(doc => ({
             value: doc.id,
-            label: doc.data().subFamilyName
+            label: doc.data().subFamilyName,
+            subFamilyHeadName: doc.data().subFamilyHeadName
         }));
         return subFamilies;
     } catch (error) {
@@ -125,10 +126,10 @@ const getCommitteeMembers = async () => {
     }
 }
 
-const getFamilyMemberDetails = async (familyMemberId) => {
+const getSingleDocument = async (id, collection) => {
     try{
         const targetDocument = await getDoc(
-            doc(FIREBASE_FIRESTORE, 'familyMembers', familyMemberId)
+            doc(FIREBASE_FIRESTORE, collection, id)
         );
         if (targetDocument.exists()) {
             return {id: targetDocument.id, ...targetDocument.data()};
@@ -151,5 +152,5 @@ export {
     getDeadMembers, 
     getCommitteeMembers, 
     getAliveMembers, 
-    getFamilyMemberDetails 
+    getSingleDocument 
 };

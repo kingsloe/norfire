@@ -94,11 +94,9 @@ const AddFuneralFee = () => {
         }
     };
 
-    const handleSubmitAndExit = () => {
-      if (validateFields()){
-        handleSubmit();
+    const handleSubmitAndExit = async () => {
+        await handleSubmit();
         router.push('/dashboard');
-      }
     }
 
     return (
@@ -114,7 +112,7 @@ const AddFuneralFee = () => {
                         title='Amount'
                         otherStyles={{ marginTop: 20 }}
                         value={form.amount}
-                        placeholder='Enter First name'
+                        placeholder='Enter Amount'
                         handleChangeText={(value) => setForm({ ...form, amount: value })}
                     />
                     <PickerField 

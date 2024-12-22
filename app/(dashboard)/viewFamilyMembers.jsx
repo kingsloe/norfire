@@ -8,6 +8,7 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
+    ActivityIndicator
 } from 'react-native';
 import { router } from 'expo-router'
 import FeatherIcon from '@expo/vector-icons/Feather';
@@ -18,6 +19,7 @@ export default function viewFamilyMember() {
     const [input, setInput] = useState('');
     const [familyMembers, setFamilyMembers] = useState([]);
     const [subFamilyList, setSubFamilyList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchAliveMembers = async () => {
@@ -29,6 +31,8 @@ export default function viewFamilyMember() {
                 setSubFamilyList(subFamilies);
             } catch (error) {
                 console.error("Couln't fetch alive members", error);
+            } finally {
+                setLoading(false)
             }
         }
         fetchAliveMembers();
@@ -72,6 +76,10 @@ export default function viewFamilyMember() {
         return rows.sort((a, b) => a.index - b.index);
   }, [input, familyMembers]);
 
+    if (loading) {
+        return <ActivityIndicator size="large" />;
+    }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
@@ -113,7 +121,7 @@ export default function viewFamilyMember() {
                       <View style={styles.cardBody}>
                         <Text style={styles.cardTitle}>{label}</Text>
 
-                        <Text style={styles.cardPhone}>{subFamilyName}</Text>
+                        <Text style={styles.cardSubFamily}>{subFamilyName}</Text>
                       </View>
 
                       <View style={styles.cardAction}>
@@ -224,7 +232,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
   },
-  cardPhone: {
+  cardSubFamily: {
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '500',
