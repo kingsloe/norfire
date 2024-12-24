@@ -24,7 +24,6 @@ const viewSubFamily = () => {
             try {
                 const subFamilies = await getSubFamilies();
                 setSubFamilyList(subFamilies);
-                console.log(subFamilies)
             }catch (error) {
                 console.error("Couln't fetch alive members", error);
             } finally {

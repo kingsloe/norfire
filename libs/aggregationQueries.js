@@ -1,4 +1,14 @@
-import { getCountFromServer, query, collection, where, getAggregateFromServer, sum, getDocs, doc, getDoc } from "firebase/firestore";
+import { 
+    getCountFromServer, 
+    query, 
+    collection, 
+    where, 
+    getAggregateFromServer, 
+    sum, 
+    getDocs, 
+    doc, 
+    getDoc,
+    toDate } from "firebase/firestore";
 import { FIREBASE_FIRESTORE } from "../services/firebaseConfig";
 const getMembersByStatus = async (status) => {
     try {
@@ -81,7 +91,7 @@ const getDeadMembers = async () => {
         );
         const deadMembers = targetDocument.docs.map(doc => ({
             value: doc.id,
-            label: doc.data().firstName + ' ' + doc.data().lastName
+            label: doc.data().firstName + ' ' + doc.data().lastName,
         }));
         return deadMembers; 
     } catch (error) {
@@ -143,6 +153,26 @@ const getSingleDocument = async (id, collection) => {
     }
 }
 
+const getFunerals = async () => {
+    try {
+        const targetDocument = await getDocs(
+            query(
+                collection(FIREBASE_FIRESTORE, 'funeral'),
+                where('isActive', '==', true)
+            )
+        )
+        const funerals = targetDocument.docs.map(doc => ({
+            label: doc.data().deadMember,
+            value: doc.id,
+            funeralDate: doc.data().funeralDate.toDate()
+        }));
+        return funerals
+    }catch (error) {
+        console.log('Failed to get funerals ', error);
+        return null;
+    }
+}
+
 export { 
     getAliveAndDeadMembers, 
     getMembersByPosition, 
@@ -152,5 +182,6 @@ export {
     getDeadMembers, 
     getCommitteeMembers, 
     getAliveMembers, 
-    getSingleDocument 
+    getSingleDocument,
+    getFunerals,
 };
