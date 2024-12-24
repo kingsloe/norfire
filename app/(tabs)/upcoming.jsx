@@ -17,53 +17,45 @@ import { getFunerals, getDeadMembers } from '../../libs/aggregationQueries';
 
 const Upcoming = () => {
     const [funeralList, setFuneralList] = useState([]);
-    // const [deadMember, setDeadMember] = useState([]);
     const [deadMembersList, setDeadMembersList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState('');
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        const fetchFuneralList = async () => {
-            try {
-                const funerals = await getFunerals();
-                setFuneralList(funerals);
-
-                const deadMembers = await getDeadMembers();
-                setDeadMembersList(deadMembers); 
-            }catch (error) {
-                console.error("Couln't fetch active funerals", error);
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchFuneralList();
-    }, []);
-
-    useEffect(() => {
+    const updateFuneralList = async () => {
         try {
-            if (funeralList.length && deadMembersList) {
-                const updatedFuneralList = funeralList.map(
-                    funeral => {
-                        const matchedMember = deadMembersList.find( member => member.value === funeral.label);
-                        return {
-                            ...funeral,
-                            deadMemberName: matchedMember ? matchedMember.label : 'Unknown'
-                        }
-                    }
-                );
-                setFuneralList(updatedFuneralList);
-            }
-        }catch (error) {
-            console.error("Couln't update deadMembers List", error);
+            const funerals = await getFunerals(true);
+            const deadMembers = await getDeadMembers();
+
+            const updatedFuneralList = funerals.map(funeral => {
+                const matchedMember = deadMembers.find(member => member.value === funeral.label);
+                return {
+                    ...funeral,
+                    deadMemberName: matchedMember ? matchedMember.label : 'Unknown',
+                };
+            });
+
+            setFuneralList(updatedFuneralList);
+            setIsReady(true);
+        } catch (error) {
+            console.error("Couldn't fetch and update funeral list", error);
+        } finally {
+            setLoading(false);
         }
-    }, [deadMembersList]);
+    };
+
+    updateFuneralList();
+}, []);
+
 
     const filteredRows = useMemo(() => {
+        if (!isReady) return [];
         const rows = [];
         const query = input.toLowerCase();
 
         for (const item of funeralList) {
-            const nameIndex = item.label.toLowerCase().search(query);
+            const nameIndex = item.deadMemberName.toLowerCase().search(query);
             if (nameIndex !== -1) {
                 rows.push({
                     ...item, 

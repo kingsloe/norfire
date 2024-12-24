@@ -57,10 +57,10 @@ const DATA = [
         title: 'Add Funeral',
         link: 'addFuneral',
       },
-      {
-        title: 'View Funerals',
-        link: 'viewFunerals',
-      },
+      // {
+      //   title: 'View Funerals',
+      //   link: 'viewFunerals',
+      // },
     ],
   },
   {

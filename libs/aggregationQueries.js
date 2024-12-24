@@ -153,12 +153,12 @@ const getSingleDocument = async (id, collection) => {
     }
 }
 
-const getFunerals = async () => {
+const getFunerals = async (status) => {
     try {
         const targetDocument = await getDocs(
             query(
                 collection(FIREBASE_FIRESTORE, 'funeral'),
-                where('isActive', '==', true)
+                where('isActive', '==', status)
             )
         )
         const funerals = targetDocument.docs.map(doc => ({
