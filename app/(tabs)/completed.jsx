@@ -25,17 +25,36 @@ const [isReady, setIsReady] = useState(false);
     useEffect(() => {
     const updateFuneralList = async () => {
         try {
-            const funerals = await getFunerals(true);
+            const funerals = await getFunerals(false);
             const deadMembers = await getDeadMembers();
 
             const updatedFuneralList = funerals.map(funeral => {
                 const matchedMember = deadMembers.find(member => member.value === funeral.label);
+                let formattedDate;
+                if (funeral.funeralDate?.toDate) {
+                    // Firestore Timestamp
+                    formattedDate = funeral.funeralDate.toDate().toDateString();
+                } else if (funeral.funeralDate instanceof Date) {
+                    // Already a Date object
+                    formattedDate = funeral.funeralDate.toDateString();
+                } else if (typeof funeral.funeralDate === 'string') {
+                    // Parseable string
+                    const parsedDate = new Date(funeral.funeralDate);
+                    formattedDate = isNaN(parsedDate.getTime()) 
+                        ? 'No Date Provided' 
+                        : parsedDate.toDateString();
+                } else {
+                    // Default case
+                    formattedDate = 'No Date Provided';
+                }
+
                 return {
                     ...funeral,
                     deadMemberName: matchedMember ? matchedMember.label : 'Unknown',
+                    funeralDate: formattedDate,
                 };
             });
-
+            console.log(funerals)
             setFuneralList(updatedFuneralList);
             setIsReady(true);
         } catch (error) {
@@ -99,7 +118,7 @@ const [isReady, setIsReady] = useState(false);
               return (
                 <View key={index} style={styles.cardWrapper}>
                     <TouchableOpacity onPress={() =>
-                        router.push(`/subFamilyDetails/${value}`)
+                        router.push(`/funeralDetails/${value}`)
                     }> 
                     <View style={styles.card}>
                         <View style={[styles.cardImg, styles.cardAvatar]}>
@@ -109,7 +128,7 @@ const [isReady, setIsReady] = useState(false);
                       <View style={styles.cardBody}>
                         <Text style={styles.cardTitle}>{deadMemberName}</Text>
 
-                        <Text style={styles.cardSubFamily}>{funeralDate.toDateString()}</Text>
+                        <Text style={styles.cardSubFamily}>{funeralDate}</Text>
                       </View>
 
                       <View style={styles.cardAction}>

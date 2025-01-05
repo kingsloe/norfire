@@ -20,31 +20,31 @@ const AddSuperFamily = () => {
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
-      creatorId: '',
-      superFamilyName: '',
-      superFamilyHeadName: ''
+        creatorId: '',
+        superFamilyName: '',
+        superFamilyHeadName: ''
     });
 
     useEffect(() => {
-      const loggedInUser = getAuth().currentUser;
-      if (loggedInUser) {
-        setCreatorId(loggedInUser.uid);
-      } else{
-        console.log('No user is logged in.');
-        return '';
-      }
+        const loggedInUser = getAuth().currentUser;
+        if (loggedInUser) {
+            setCreatorId(loggedInUser.uid);
+        } else{
+            console.log('No user is logged in.');
+            return '';
+        }
     }, []);
 
     const validateFields = () => {
-      if (form.superFamilyName.trim() === ''){
-        alert('Family Name is required');
-        return false;
-      };
-      if (form.superFamilyHeadName.trim() === ''){
-        alert('Family Head name is required');
-        return false;
-      };
-      return true;
+        if (form.superFamilyName.trim() === ''){
+            alert('Family Name is required');
+            return false;
+        };
+        if (form.superFamilyHeadName.trim() === ''){
+            alert('Family Head name is required');
+            return false;
+        };
+        return true;
     };
 
     const handleSubmit = async () => {
@@ -56,16 +56,16 @@ const AddSuperFamily = () => {
             updatedAt: serverTimestamp(),
         }
         try {
-          if (validateFields()) {
-            setLoading(true);
-            const response = await addDoc(collection(FIREBASE_FIRESTORE, 'superFamily'), payload);
-            setForm({
-              creatorId: '',
-              superFamilyName: '',
-              superFamilyHeadName: ''
-          });  
-          setLoading(false);
-          }
+            if (validateFields()) {
+                setLoading(true);
+                const response = await addDoc(collection(FIREBASE_FIRESTORE, 'superFamily'), payload);
+                setForm({
+                    creatorId: '',
+                    superFamilyName: '',
+                    superFamilyHeadName: ''
+                });  
+                setLoading(false);
+            }
         } catch (submitError) {
             if (submitError.response) {
                 console.error('Failed to add Super Family', submitError.response.data);
@@ -78,15 +78,15 @@ const AddSuperFamily = () => {
     };
 
     const handleSubmitAndExit = () => {
-      if (validateFields()){
-        handleSubmit();
-        router.push('/dashboard');
-      }
+        if (validateFields()){
+            handleSubmit();
+            router.push('/dashboard');
+        }
     }
 
     return (
         <SafeAreaView>
-          <Spinner
+            <Spinner
                 visible={loading}
                 textContent={'Loading...'}
                 textStyle={styles.spinnerTextStyle}
@@ -108,17 +108,17 @@ const AddSuperFamily = () => {
                         handleChangeText={(e) => setForm({ ...form, superFamilyHeadName: e })}
                     />
                     <View style={styles.submitButtonContainer}>
-                    <CustomButton
-                        title='Submit & Add More'
-                        handlePress={handleSubmit}
-                        containerStyles={{ marginTop: 20, paddingHorizontal: 10  }}
-                    />
-                    <CustomButton
-                        title='Submit & Exit'
-                        handlePress={handleSubmitAndExit}
-                        containerStyles={{ marginTop: 20, paddingHorizontal: 10 }}
-                    />
-                  </View>
+                        <CustomButton
+                            title='Submit & Add More'
+                            handlePress={handleSubmit}
+                            containerStyles={{ marginTop: 20, paddingHorizontal: 10  }}
+                        />
+                        <CustomButton
+                            title='Submit & Exit'
+                            handlePress={handleSubmitAndExit}
+                            containerStyles={{ marginTop: 20, paddingHorizontal: 10 }}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>

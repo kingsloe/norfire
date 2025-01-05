@@ -12,6 +12,7 @@ const DashboardLayout = () => {
       <Stack.Screen name='viewFuneralFees' options={{headerShown: true, headerTitle: 'View Funeral Fees'}} />
       <Stack.Screen name='addSubFamily' options={{headerShown: true, headerTitle: 'Add Sub Family'}} />
       <Stack.Screen name='viewSubFamilies' options={{headerShown: true, headerTitle: 'View Sub Families'}} />
+      <Stack.Screen name='funeralDetails' options={{headerShown: false}} />
       {/*<Stack.Screen name='addSuperFamily' options={{headerShown: true, headerTitle: 'Add Super Family'}} />*/}
       {/*<Stack.Screen name='viewSuperFamilies' options={{headerShown: true, headerTitle: 'View Super Families'}} />*/}
     </Stack>

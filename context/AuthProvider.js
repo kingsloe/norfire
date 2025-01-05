@@ -14,7 +14,6 @@ const AuthProvider = ({ children }) => {
             try {
                 if (user) {
                   setUser(user);
-                  console.log(user.email);
                 } else {
                   setUser(null);
                 }

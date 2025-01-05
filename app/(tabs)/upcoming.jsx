@@ -30,9 +30,28 @@ const Upcoming = () => {
 
             const updatedFuneralList = funerals.map(funeral => {
                 const matchedMember = deadMembers.find(member => member.value === funeral.label);
+                let formattedDate;
+                if (funeral.funeralDate?.toDate) {
+                    // Firestore Timestamp
+                    formattedDate = funeral.funeralDate.toDate().toDateString();
+                } else if (funeral.funeralDate instanceof Date) {
+                    // Already a Date object
+                    formattedDate = funeral.funeralDate.toDateString();
+                } else if (typeof funeral.funeralDate === 'string') {
+                    // Parseable string
+                    const parsedDate = new Date(funeral.funeralDate);
+                    formattedDate = isNaN(parsedDate.getTime()) 
+                        ? 'No Date Provided' 
+                        : parsedDate.toDateString();
+                } else {
+                    // Default case
+                    formattedDate = 'No Date Provided';
+                }
+
                 return {
                     ...funeral,
                     deadMemberName: matchedMember ? matchedMember.label : 'Unknown',
+                    funeralDate: formattedDate,
                 };
             });
 
@@ -101,17 +120,16 @@ const Upcoming = () => {
               return (
                 <View key={index} style={styles.cardWrapper}>
                     <TouchableOpacity onPress={() =>
-                        router.push(`/subFamilyDetails/${value}`)
+                        router.push(`/funeralDetails/${value}`)
                     }> 
                     <View style={styles.card}>
                         <View style={[styles.cardImg, styles.cardAvatar]}>
-                            <Text style={styles.cardAvatarText}>{label[0].toUpperCase()}</Text>
+                            <Text style={styles.cardAvatarText}>{deadMemberName ? deadMemberName[0].toUpperCase(): Array.from('Unknown')[0]}</Text>
                         </View>
 
                       <View style={styles.cardBody}>
-                        <Text style={styles.cardTitle}>{deadMemberName}</Text>
-
-                        <Text style={styles.cardSubFamily}>{funeralDate.toDateString()}</Text>
+                        <Text style={styles.cardTitle}>{deadMemberName} Funeral</Text>
+                        <Text style={styles.cardSubFamily}>{funeralDate}</Text>
                       </View>
 
                       <View style={styles.cardAction}>

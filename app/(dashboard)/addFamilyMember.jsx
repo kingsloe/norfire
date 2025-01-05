@@ -156,7 +156,7 @@ const AddFamilyMember = () => {
     }
 
     return (
-        <SafeAreaView>
+        <View>
           <Spinner
                 visible={loading}
                 textContent={'Loading...'}
@@ -230,7 +230,7 @@ const AddFamilyMember = () => {
                   </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

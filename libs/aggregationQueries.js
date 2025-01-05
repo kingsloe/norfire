@@ -8,7 +8,8 @@ import {
     getDocs, 
     doc, 
     getDoc,
-    toDate } from "firebase/firestore";
+    toDate,
+    Timestamp } from "firebase/firestore";
 import { FIREBASE_FIRESTORE } from "../services/firebaseConfig";
 const getMembersByStatus = async (status) => {
     try {
@@ -70,7 +71,9 @@ const getSubFamilies = async () => {
 
 const getSuperFamily = async () => {
     try {
-        const targetDocument = await getDocs(collection(FIREBASE_FIRESTORE, 'superFamily'));
+        const targetDocument = await getDocs(
+            collection(FIREBASE_FIRESTORE, 'superFamily')
+        );
         const superFamily = targetDocument.docs.map(doc => ({
             value: doc.id,
             label: doc.data().superFamilyName
@@ -110,7 +113,10 @@ const getAliveMembers = async () => {
         const aliveMembers = targetDocument.docs.map(doc => ({
             value: doc.id,
             label: `${doc.data().firstName} ${doc.data().lastName}`,
-            subFamilyId: doc.data().subFamily
+            subFamilyId: doc.data().subFamily,
+            gender: doc.data().gender,
+            memberRef: doc.ref,
+            balance: doc.data().balance
         }))
         return aliveMembers; 
     } catch (error) {
@@ -142,7 +148,16 @@ const getSingleDocument = async (id, collection) => {
             doc(FIREBASE_FIRESTORE, collection, id)
         );
         if (targetDocument.exists()) {
-            return {id: targetDocument.id, ...targetDocument.data()};
+            const data = targetDocument.data();
+
+            // Convert Firestore Timestamps to JavaScript Date objects
+            const convertedData = Object.keys(data).reduce((acc, key) => {
+                acc[key] = data[key]?.toDate ? data[key].toDate() : data[key];
+                return acc;
+            }, {});
+            return {
+                id: targetDocument.id, 
+                ...convertedData};
         }else {
             console.error("No such document!");
             return null;
@@ -164,12 +179,45 @@ const getFunerals = async (status) => {
         const funerals = targetDocument.docs.map(doc => ({
             label: doc.data().deadMember,
             value: doc.id,
-            funeralDate: doc.data().funeralDate.toDate()
+            funeralDate: doc.data().funeralDate?.toDate ? doc.data().funeralDate.toDate() : 'No Date'
         }));
         return funerals
     }catch (error) {
         console.log('Failed to get funerals ', error);
         return null;
+    }
+}
+
+const getFuneralFeesByGender = async (gender) => {
+    try {
+        const targetDocument = await getDocs(
+            query(
+                collection(FIREBASE_FIRESTORE, 'funeralFees'),
+                where('gender', '==', gender)
+            )
+        )
+        const fees = targetDocument.docs.map(doc => ({
+            amount: doc.data().amount
+        }));
+        return fees;
+    } catch (error) {
+        console.error ('Failed to get funeral fees', error);
+        return null;
+    }
+}
+
+const getFuneralFees = async () => {
+    try {
+        const targetDocument = await getDocs(
+            collection(FIREBASE_FIRESTORE, 'funeralFees')
+        )
+        const fees = targetDocument.docs.map(doc => ({
+            amount: doc.data().amount,
+            gender: doc.data().gender
+        }));
+        return fees;
+    } catch (error) {
+        console.error ('Failed to get funeral fees', error);
     }
 }
 
@@ -184,4 +232,6 @@ export {
     getAliveMembers, 
     getSingleDocument,
     getFunerals,
+    getFuneralFeesByGender,
+    getFuneralFees
 };

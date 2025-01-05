@@ -12,11 +12,16 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import { router } from 'expo-router';
 
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { FIREBASE_FIRESTORE } from '../../services/firebaseConfig';
 import { getAuth } from 'firebase/auth';
 
-import { getDeadMembers, getCommitteeMembers } from '../../libs/aggregationQueries';
+import { 
+    getDeadMembers, 
+    getCommitteeMembers, 
+    getAliveMembers,
+    getFuneralFees 
+} from '../../libs/aggregationQueries';
 
 const { height } = Dimensions.get('window');
 
@@ -38,6 +43,8 @@ const AddFuneral = () => {
     const [showPicker, setShowPicker] = useState(false);
     const [committeeMembersList, setCommitteeMembersList] = useState([]);
     const [statusList, setStatusList] = useState(STATUS);
+    const [familyMembers, setFamilyMembers] = useState([]);
+    const [funeralFees, setFuneralFees] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
@@ -53,8 +60,15 @@ const AddFuneral = () => {
         const fetchMembers = async () => {
             const deadMembers = await getDeadMembers();
             setDeadMembersList(deadMembers);
+
             const receivedCommitteeMembersList = await getCommitteeMembers();
             setCommitteeMembersList(receivedCommitteeMembersList);
+
+            const receivedAliveMembers = await getAliveMembers();
+            setFamilyMembers(receivedAliveMembers);
+
+            const receivedFuneralFees = await getFuneralFees()
+            setFuneralFees(receivedFuneralFees);
         };
         fetchMembers();
         const loggedInUser = getAuth().currentUser;
@@ -91,10 +105,6 @@ const AddFuneral = () => {
           alert('Type of funeral should be selected.');
           return false;
       };
-      // if (form.funeralDate.trim() === ''){
-      //   alert('Family Head name is required');
-      //   return false;
-      // };
       if (form.isActive === ''){
           alert('Is the funeral still ongoing or done.');
           return false;
@@ -103,6 +113,11 @@ const AddFuneral = () => {
     };
 
     const handleSubmit = async () => {
+        const funeralFeesList = funeralFees.reduce((accumulator, currentValue) => {
+            accumulator[currentValue.gender] = currentValue.amount;
+            return accumulator
+        }, {})
+        console.log(funeralFeesList);
         const payload = {
             creatorId: creatorId,
             deadMember: form.deadMember,
@@ -114,38 +129,51 @@ const AddFuneral = () => {
             updatedAt: serverTimestamp(),
         }
         try {
-          if (validateFields()) {
-              setLoading(true);
-              const response = await addDoc(collection(FIREBASE_FIRESTORE, 'funeral'), payload);
-              setForm({
-                  creatorId: '',
-                  deadMember: '',
-                  funeralType: '',
-                  funeralDate: '',
-                  committeeMembers: '',
-                  isActive: '',
-              });  
-              setLoading(false);
-          }
+            if (validateFields()) {
+                setLoading(true);
+                const response = await addDoc(collection(FIREBASE_FIRESTORE, 'funeral'), payload);
+
+                const batch = writeBatch(FIREBASE_FIRESTORE);
+                familyMembers.forEach((doc) => {
+                    console.log('Balance: '+doc.balance);
+                    if (doc.gender === 'male') {
+                    batch.update(
+                        doc.memberRef, 
+                        {balance: isNaN(doc.balance) ? funeralFeesList.male : parseInt(doc.balance) - funeralFeesList.male}
+                    )}else if (doc.gender === 'female') {
+                        batch.update(
+                            doc.memberRef,
+                            {balance: isNaN(doc.balance) ? funeralFeesList.female : parseInt(doc.balance) - funeralFeesList.female}
+                        )
+                    }
+                });
+                await batch.commit();
+                console.log('Successfully updated members')
+
+                setForm({
+                    creatorId: '',
+                    deadMember: '',
+                    funeralType: '',
+                    funeralDate: '',
+                    committeeMembers: '',
+                    isActive: '',
+                });  
+                setLoading(false);
+                router.push('/dashboard');
+            }
         } catch (submitError) {
-              if (submitError.response) {
-                  console.error('Failed to Create Funeral', submitError.response.data);
-              } else if (submitError.request) {
-                  console.error('No response from the server. Network issue or server is down.');
-              } else {
-                  console.error('Error during request setup', submitError.message);
-              }
+            if (submitError.response) {
+                console.error('Failed to Create Funeral', submitError.response.data);
+            } else if (submitError.request) {
+                console.error('No response from the server. Network issue or server is down.');
+            } else {
+                console.error('Error during request setup', submitError.message);
+            }
         } finally {
-          setLoading(false);
-        };
+            setLoading(false);
+            };
     };
 
-    const handleSubmitAndExit = () => {
-        if (validateFields()){
-            handleSubmit();
-            router.push('/dashboard');
-        }
-    };
 
     return (
         <SafeAreaView>
@@ -190,18 +218,18 @@ const AddFuneral = () => {
                         showPicker={showPicker}
 
                     />
-                    <View style={styles.submitButtonContainer}>
-                    <CustomButton
+                    {/*<View style={styles.submitButtonContainer}>*/}
+                    {/*<CustomButton
                         title='Submit & Add More'
                         handlePress={handleSubmit}
                         containerStyles={{ marginTop: 20, paddingHorizontal: 10  }}
-                    />
+                    />*/}
                     <CustomButton
                         title='Submit & Exit'
-                        handlePress={handleSubmitAndExit}
+                        handlePress={handleSubmit}
                         containerStyles={{ marginTop: 20, paddingHorizontal: 10 }}
                     />
-                  </View>
+                  {/*</View>*/}
                 </View>
             </ScrollView>
         </SafeAreaView>
