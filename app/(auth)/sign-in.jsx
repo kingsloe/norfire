@@ -37,20 +37,16 @@ export default function SignIn () {
                 const response = await signInWithEmailAndPassword(auth, form.email, form.password);
                 router.replace('/dashboard');
             } catch (error) {
-                let errorCode = error.code;
-                let errorMessage;
-
-                switch (errorCode) {
+                switch (error.code) {
                     case 'auth/invalid-email':
-                        errorMessage = 'The email address is not valid';
+                        alert('The email address is not valid');
                         break;
                     case 'auth/invalid-credential':
-                        errorMessage = 'Email or password is incorrect. Please check and try again.';
+                        alert('Email or password is incorrect. Please check and try again.');
                         break;
                     default:
-                        errorMessage = 'Unexpected error occured, check your internet connection and try again.';
+                        alert('Unexpected error occured, check your internet connection and try again.');
                 }
-                alert(errorMessage);
                 
             } finally {
                 setLoading(false);
@@ -83,6 +79,8 @@ export default function SignIn () {
                         value= {form.email}
                         placeholder='Enter email'
                         handleChangeText={(text) => setForm({ ...form, email: text})}
+                        keyboardType = 'email-address'
+                        autoCapitalize = 'none'
                     />
                     <FormField 
                         title='Password'
@@ -98,7 +96,7 @@ export default function SignIn () {
                         justifyContent: 'flex-end',
                         marginTop: 10
                         }}>
-                        <Text><Link href={'/forgot-password'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password?</Link></Text>
+                        <Text><Link href={'/forgotPassword'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password?</Link></Text>
                     </View>
                     <CustomButton 
                         title='Login'
