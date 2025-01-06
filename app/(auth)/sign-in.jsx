@@ -13,8 +13,8 @@ const { height } = Dimensions.get('window');
 export default function SignIn () {
     const { user } = useAuth();
     const [ form, setForm ] = useState({
-        email: 'nanayawdjan447@gmail.com',
-        password: 'justInKase'
+        email: '',
+        password: ''
     });
     const auth = FIREBASE_AUTH;
     const [ loading, setLoading ] = useState(false);
@@ -63,7 +63,7 @@ export default function SignIn () {
                         otherStyles={{marginTop: 20}}
                         value= {form.password}
                         placeholder='Enter Password'
-                        handleChangeText={(text) => setForm({ ...form, family_key: text})}
+                        handleChangeText={(text) => setForm({ ...form, password: text})}
                     />
                     
                     <View style={{
@@ -72,7 +72,7 @@ export default function SignIn () {
                         justifyContent: 'flex-end',
                         marginTop: 10
                         }}>
-                        <Text>Click here <Link href={'/forgot-password'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password</Link></Text>
+                        <Text> <Link href={'/forgot-password'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password</Link></Text>
                     </View>
                     <CustomButton 
                         title='Login'
