@@ -19,16 +19,42 @@ export default function SignIn () {
     const auth = FIREBASE_AUTH;
     const [ loading, setLoading ] = useState(false);
 
+    const validateFields = () => {
+        if (form.email === '') {
+            alert('Email Field required');
+            return false;
+        } else if (form.password.length === '') {
+            alert('Password Field required');
+            return false;
+        }
+        return true;
+    }
+
     const submit = async () => {
-        setLoading(true);
-        try {
-            const response = await signInWithEmailAndPassword(auth, form.email, form.password);
-            router.replace('/dashboard');
-        } catch (error) {
-            console.error(error);
-            alert('Sign in failed ' + error.message);
-        } finally {
-            setLoading(false);
+        if (validateFields()){
+            setLoading(true);
+            try {
+                const response = await signInWithEmailAndPassword(auth, form.email, form.password);
+                router.replace('/dashboard');
+            } catch (error) {
+                let errorCode = error.code;
+                let errorMessage;
+
+                switch (errorCode) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'The email address is not valid';
+                        break;
+                    case 'auth/invalid-credential':
+                        errorMessage = 'Email or password is incorrect. Please check and try again.';
+                        break;
+                    default:
+                        errorMessage = 'Unexpected error occured, check your internet connection and try again.';
+                }
+                alert(errorMessage);
+                
+            } finally {
+                setLoading(false);
+            }
         }
     }
 
@@ -72,7 +98,7 @@ export default function SignIn () {
                         justifyContent: 'flex-end',
                         marginTop: 10
                         }}>
-                        <Text> <Link href={'/forgot-password'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password</Link></Text>
+                        <Text><Link href={'/forgot-password'} style={{fontSize: 20, fontWeight: 'bold'}}>Forgot Password?</Link></Text>
                     </View>
                     <CustomButton 
                         title='Login'
