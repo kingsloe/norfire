@@ -48,7 +48,7 @@ const AddFamilyMember = () => {
       position: '',
       isAlive: '',
       gender: '',
-      balance: '',
+      balance: 0,
       contact: '',
     });
 
@@ -133,6 +133,7 @@ const AddFamilyMember = () => {
               position: '',
               isAlive: '',
               gender: '',
+              balance: 0,
               contact: '',
           });  
           setLoading(false);

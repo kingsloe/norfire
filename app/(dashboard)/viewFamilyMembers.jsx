@@ -15,7 +15,7 @@ import FeatherIcon from '@expo/vector-icons/Feather';
 import { getAliveMembers, getSubFamilies } from '../../libs/aggregationQueries';
 
 
-export default function viewFamilyMember() {
+export default function ViewFamilyMember() {
     const [input, setInput] = useState('');
     const [familyMembers, setFamilyMembers] = useState([]);
     const [subFamilyList, setSubFamilyList] = useState([]);

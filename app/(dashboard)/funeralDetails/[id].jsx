@@ -84,7 +84,7 @@ export default function FuneralDetails() {
             <Text style={{ marginTop: 16, marginBottom: 10, marginLeft: 16, color: '#64748b', fontWeight: 'bold'}}>Payments</Text>
             <View style={styles.cardWrapper}>
                 <TouchableOpacity onPress={() => 
-                    router.push('/funeralDetails/membersToMakePayment')
+                    router.push('../membersToMakePayment')
                 }>
                     <View style={styles.card}>
                         <View style={styles.cardBody}>
@@ -111,7 +111,7 @@ export default function FuneralDetails() {
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        marginTop: 34
+        // marginTop: 34
     },
     card: {
         paddingVertical: 14,

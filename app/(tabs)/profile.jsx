@@ -32,16 +32,7 @@ export default function Profile () {
             <Text style={{fontSize: 18, color: '#283033'}}>Head of Committee</Text>
           </View>
           <View style={{flex: 3, justifyContent: 'space-around'}}>
-            <CustomButton 
-                title='Edit Profile'
-                containerStyles={{width: '100%', marginTop: 28, backgroundColor: '#F4FDFF'}}
-                // handlePress={() => router.push('/editProfile')}
-              />
-              <CustomButton 
-                title='Change Password'
-                containerStyles={{width: '100%', marginTop: 28, backgroundColor: '#F4FDFF'}}
-                // handlePress={() => router.push('/changePassword')}
-              />
+
               <CustomButton 
                 title='Log Out'
                 containerStyles={{width: '100%', marginTop: 28}}

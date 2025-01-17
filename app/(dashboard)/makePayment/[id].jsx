@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { ScrollView, View, StyleSheet, Dimensions } from 'react-native';
-import { FormField, CustomButton } from '../../../../components';
-import { getSingleDocument, getFuneralFeesByGender } from '../../../../libs/aggregationQueries';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, StyleSheet, Dimensions, Text } from 'react-native';
+import { FormField, CustomButton } from '../../../components';
+import { getSingleDocument, getFuneralFeesByGender } from '../../../libs/aggregationQueries';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useLocalSearchParams, router } from 'expo-router';
 import { getAuth } from 'firebase/auth';
 import { addDoc, collection, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
-import { FIREBASE_FIRESTORE } from '../../../../services/firebaseConfig';
+import { FIREBASE_FIRESTORE } from '../../../services/firebaseConfig';
 
 const { height } = Dimensions.get('window');
 
@@ -23,11 +23,7 @@ const MakePayment = () => {
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
-        userId : '',
-        familyMemberId : '',
-        subFamilyId : '',
         amount : '',
-        balance : ''
     });
 
     useEffect(() => {
@@ -41,6 +37,7 @@ const MakePayment = () => {
         const fetchSubFamily = async () => {
             try {
                 const fetchedMemberDetails = await getSingleDocument(id, 'familyMembers');
+                console.log(fetchedMemberDetails.balance)
                 setSubFamilyId(fetchedMemberDetails.subFamily);
                 setInitialBalance(fetchedMemberDetails.balance);
                 if (fetchedMemberDetails.gender == 'male') {
@@ -56,29 +53,26 @@ const MakePayment = () => {
             }
         }
         fetchSubFamily();
+        
     }, []);
 
     useEffect(() => {
         try {
-            if (parseInt(initialBalance) > 0) {
+            if (isNaN(initialBalance) || initialBalance===String()) {
+                setBalance(parseInt(amount));
+            } else{
                 const currentBalance = parseInt(amount) + parseInt(initialBalance);
-                // const newBalance = currentAmount - parseInt(amountToPay) || 0;
-                // const newBalance = currentBalance
-                setBalance(currentBalance);
-            } else if (parseInt(initialBalance) < 0) {
-                const currentBalance = parseInt(amount) - parseInt(amountToPay);
-                // const newBalance = currentBalance + parseInt(initialBalance) || 0;
-                // const newBalance = currentBalance
                 setBalance(currentBalance);
             }
+           
         } catch (error) {
             console.error('Failed to update balance', error);
         }
     }, [amount, initialBalance, amountToPay]);
 
     const validateFields = () => {
-        if (form.amount === ''){
-            alert('Amount is required');
+        if (!form.amount || isNaN(form.amount)){
+            alert('Please enter a valid amount.');
             return false;
         };
         return true;
@@ -94,13 +88,14 @@ const MakePayment = () => {
             createdAt : serverTimestamp(),
             updatedAt : serverTimestamp()
         }
+        console.log(payload)
         try {
             if (validateFields()) {
                 setLoading(true);
                 const response = await addDoc(collection(FIREBASE_FIRESTORE, 'fees'), payload);
                 const targetDocument = doc(FIREBASE_FIRESTORE, 'familyMembers', id);
-                await updateDoc(targetDocument, {
-                    balance: balance
+                const sending = await updateDoc(targetDocument, {
+                    balance: parseInt(balance)
                 })
                 setForm({
                     userId : '',
@@ -110,7 +105,7 @@ const MakePayment = () => {
                     balance : ''
                 });
                 setLoading(false);
-                router.replace('/funeralDetails/membersToMakePayment')
+                router.replace('../membersToMakePayment')
 
             }
         } catch (error) {
@@ -129,8 +124,9 @@ const MakePayment = () => {
             />
             <ScrollView>
                 <View style={styles.container}>
+                    <Text style={{fontSize: 18}}>Balance: {initialBalance ? initialBalance : 0}</Text>
                     <FormField 
-                        title = 'Amount'
+                        // title = 'Amount'
                         value = {form.amount}
                         placeholder = 'Enter Amount'
                         handleChangeText = {(e) => {

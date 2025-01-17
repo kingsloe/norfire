@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, SectionList } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import FeatherIcon from '@expo/vector-icons/Feather';
 import { getSingleDocument } from '../../../libs/aggregationQueries';
+import { CustomButton } from '../../../components';
 
 export default function MemberDetails() {
     const { id } = useLocalSearchParams();
@@ -77,6 +78,16 @@ export default function MemberDetails() {
                     </View>
                 </View>
             ))}
+            <CustomButton
+                title = 'Edit Profile'
+                containerStyles = {{marginHorizontal: 10, marginVertical: 10, minHeight: 50}}
+                // handlePress = {() => {router.push(`/editProfile/${id}`)}}
+            />
+            <CustomButton
+                title = 'Payment Records'
+                containerStyles = {{marginHorizontal: 10, marginVertical: 10, minHeight: 50}}
+                // handlePress = 
+            />
         </View>  
             
     );
@@ -85,6 +96,7 @@ export default function MemberDetails() {
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
+        marginTop: 34,
     },
     card: {
         paddingVertical: 14,

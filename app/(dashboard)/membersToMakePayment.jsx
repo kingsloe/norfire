@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router'
 import FeatherIcon from '@expo/vector-icons/Feather';
-import { getAliveMembers, getSubFamilies } from '../../../libs/aggregationQueries';
+import { getAliveMembers, getSubFamilies } from '../../libs/aggregationQueries';
 
 
 export default function viewFamilyMember() {
@@ -113,7 +113,7 @@ export default function viewFamilyMember() {
                             return (
                                 <View key={index} style={styles.cardWrapper}>
                                     <TouchableOpacity onPress={() =>
-                                        router.push(`./makePayment/${value}`)
+                                        router.push(`../makePayment/${value}`)
                                     }> 
                                         <View style={styles.card}>
                                             <View style={[styles.cardImg, styles.cardAvatar]}>

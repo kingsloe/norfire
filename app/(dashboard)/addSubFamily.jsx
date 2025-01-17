@@ -31,6 +31,7 @@ const AddSubFamily = () => {
     useEffect(() => {
       const fetchSuperFamily = async () => {
         const superFamily = await getSuperFamily();
+        console.log(superFamily)
         setSuperFamilyList(superFamily);
       };
       fetchSuperFamily();
@@ -52,32 +53,37 @@ const AddSubFamily = () => {
         alert('Family Head name is required');
         return false;
       };
+      if (form.superFamilyId.trim() === ''){
+        alert('Super family field is required');
+        return false;
+      }
       return true;
     };
 
     const handleSubmit = async () => {
         const payload = {
             creatorId: creatorId,
-            superFamily: form.superFamily,
+            superFamilyId: form.superFamilyId,
             subFamilyName: form.subFamilyName,
             subFamilyHeadName: form.subFamilyHeadName,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
         }
+        console.log(payload)
         try {
           if (validateFields()) {
             setLoading(true);
             const response = await addDoc(collection(FIREBASE_FIRESTORE, 'subFamilies'), payload);
             setForm({
               creatorId: '',
-              superFamily: '',
+              superFamilyId: '',
               subFamilyName: '',
               subFamilyHeadName: '',
           });  
           setLoading(false);
           }
         } catch (error) {
-            console.error("Couln't submit data: ", error)
+            console.error("Couln't submit data: ", error.message)
         } finally {
           setLoading(false);
         }
@@ -117,7 +123,7 @@ const AddSubFamily = () => {
                         title="Super Family"
                         value={form.superFamily}
                         items={superFamilyList}
-                        handleChangeText={(value) => setForm({ ...form, superFamily: value })}
+                        handleChangeText={(value) => setForm({ ...form, superFamilyId: value })}
                     />
                     <View style={styles.submitButtonContainer}>
                     <CustomButton
