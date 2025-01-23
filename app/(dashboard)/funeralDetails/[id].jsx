@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import { 
+    View, 
+    Text, 
+    ActivityIndicator, 
+    StyleSheet, 
+    SectionList, 
+    TouchableOpacity, 
+    Button 
+} from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import FeatherIcon from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getSingleDocument } from '../../../libs/aggregationQueries';
 
 export default function FuneralDetails() {
@@ -54,8 +65,8 @@ export default function FuneralDetails() {
     }
 
     return (
-        
-        <View style={styles.container}>
+        <SafeAreaView style={{backgroundColor: '#F4FDFF'}}>
+            
             <View style={{paddingHorizontal: 16}}>
                 <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{deadMember ? deadMember.firstName+' '+deadMember.lastName : 'Unknown'}</Text>
                 <Text style={{ marginTop: 8, color: '#64748b' }}>Manage individual funeral information here.</Text>
@@ -102,17 +113,14 @@ export default function FuneralDetails() {
                     </View>
                 </TouchableOpacity>
             </View>
-            
-        </View>  
+ 
+    </SafeAreaView>
             
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 16,
-        // marginTop: 34
-    },
+   
     card: {
         paddingVertical: 14,
         flexDirection: 'row',

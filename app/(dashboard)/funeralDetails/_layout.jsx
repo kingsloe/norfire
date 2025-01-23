@@ -1,12 +1,14 @@
-import { Stack } from 'expo-router'
-import React from 'react'
+import { Stack } from 'expo-router';
+import React from 'react';
+import {Button} from 'react-native';
 
 const funeralDetailsLayout = () => {
 	return (
 		<Stack>
-			<Stack.Screen name="[id]" options={{headerShown: false, headerTitle: 'Funeral Details'}} />
-			{/*<Stack.Screen name="membersToMakePayment" options={{headerShown: true, headerTitle: 'Family Members'}}/>*/}
-			{/*<Stack.Screen name="makePayment" options={{headerShown: true, headerTitle: 'Record Payment'}} />*/}
+			<Stack.Screen name="[id]" options={{
+				headerShown: false, 
+				headerTitle: 'Funeral Details',
+			}} />
 		</Stack>
 	)
 }

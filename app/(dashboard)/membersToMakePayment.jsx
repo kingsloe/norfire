@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { router } from 'expo-router'
 import FeatherIcon from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { getAliveMembers, getSubFamilies } from '../../libs/aggregationQueries';
 
 
@@ -77,12 +79,33 @@ export default function viewFamilyMember() {
     }, [input, familyMembers]);
 
     if (loading) {
-        return <ActivityIndicator size="large" />;
+        return <ActivityIndicator size="large" style={{marginTop: 34}} />;
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View style={styles.container}>
+
+            <View style={styles.headerContainer}>
+
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                >
+                    <View style={{marginLeft: 20, display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <Ionicons name="arrow-back" size={24} color="#000000" />
+                    </View>
+                </TouchableOpacity>
+
+                <Text style={{fontSize: 20, fontWeight:'bold', color:"#000000"}}>Funeral Details</Text>
+
+                <TouchableOpacity onPress={() => router.push('../../(tabs)/dashboard')}>
+                    <View style={{marginRight: 20}}>
+                        <MaterialIcons name="home" size={24} color="#000000" />
+                    </View>
+                </TouchableOpacity>
+
+            </View>
+
                 <View style={styles.searchWrapper}>
                     <View style={styles.search}>
                         <View style={styles.searchIcon}>
@@ -153,6 +176,17 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexShrink: 1,
         flexBasis: 0,
+    },
+     headerContainer: {
+        width: '100%',
+        height: 56,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 35,
+        paddingVertical: 10,
+        // backgroundColor: 'red',
     },
     /** Search */
     search: {

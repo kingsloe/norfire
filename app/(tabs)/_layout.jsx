@@ -1,6 +1,5 @@
 import React from 'react'
 
-// newly added for navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { mainButtonColor, secondaryButtonColor, mainBackgroundColor } from '../../constants/colors';

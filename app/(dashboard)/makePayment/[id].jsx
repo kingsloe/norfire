@@ -88,7 +88,6 @@ const MakePayment = () => {
             createdAt : serverTimestamp(),
             updatedAt : serverTimestamp()
         }
-        console.log(payload)
         try {
             if (validateFields()) {
                 setLoading(true);
