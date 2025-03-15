@@ -10,7 +10,7 @@ import {
     Image,
     ActivityIndicator
 } from 'react-native';
-import { router } from 'expo-router'
+import { useLocalSearchParams, router, usePathname } from 'expo-router'
 import FeatherIcon from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -23,6 +23,8 @@ export default function viewFamilyMember() {
     const [subFamilyList, setSubFamilyList] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const pathname = useLocalSearchParams();
+
     useEffect(() => {
         const fetchAliveMembers = async () => {
             try{
@@ -31,6 +33,7 @@ export default function viewFamilyMember() {
 
                 const subFamilies = await getSubFamilies();
                 setSubFamilyList(subFamilies);
+                
             } catch (error) {
                 console.error("Couln't fetch alive members", error);
             } finally {
@@ -54,6 +57,7 @@ export default function viewFamilyMember() {
                 )
                 setFamilyMembers(updatedFamilyMembers);
             }
+            
         } catch (error) {
             console.error("Couln't update family members: ", error);
         }
@@ -96,7 +100,7 @@ export default function viewFamilyMember() {
                     </View>
                 </TouchableOpacity>
 
-                <Text style={{fontSize: 20, fontWeight:'bold', color:"#000000"}}>Funeral Details</Text>
+                <Text style={{fontSize: 20, fontWeight:'bold', color:"#000000"}}>Family Members</Text>
 
                 <TouchableOpacity onPress={() => router.push('../../(tabs)/dashboard')}>
                     <View style={{marginRight: 20}}>
@@ -135,8 +139,9 @@ export default function viewFamilyMember() {
                         filteredRows.map(({ label, subFamilyName, value }, index) => {
                             return (
                                 <View key={index} style={styles.cardWrapper}>
-                                    <TouchableOpacity onPress={() =>
-                                        router.push(`../makePayment/${value}`)
+                                    <TouchableOpacity onPress={() =>{
+                                        router.push(`../makePayment/${value}?funeralId=${pathname.funeralId}`)
+                                    }
                                     }> 
                                         <View style={styles.card}>
                                             <View style={[styles.cardImg, styles.cardAvatar]}>

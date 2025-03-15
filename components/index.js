@@ -5,4 +5,13 @@ import StatisticsCard from "./StatisticsCard";
 import MultiplePickerField from "./MultiplePickerField";
 import DatePickerComponent from "./DatePicker";
 import SearchInput from "./SearchInput";
-export { CustomButton, FormField, Avatar, StatisticsCard, MultiplePickerField, DatePickerComponent, SearchInput };
+import NavigationHeader from "./NavigationHeader";
+export { 
+	CustomButton, 
+	FormField, 
+	Avatar, 
+	StatisticsCard, 
+	MultiplePickerField, 
+	DatePickerComponent, 
+	SearchInput,
+	NavigationHeader };

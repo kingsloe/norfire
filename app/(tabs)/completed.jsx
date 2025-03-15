@@ -54,7 +54,6 @@ const [isReady, setIsReady] = useState(false);
                     funeralDate: formattedDate,
                 };
             });
-            console.log(funerals)
             setFuneralList(updatedFuneralList);
             setIsReady(true);
         } catch (error) {

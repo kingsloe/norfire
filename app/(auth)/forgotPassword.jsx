@@ -7,6 +7,7 @@ import { FormField, CustomButton } from '../../components';
 import { useAuth } from '../../context/AuthProvider';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../services/firebaseConfig';
+import { Redirect } from 'expo-router';
 
 const { height } = Dimensions.get('window');
 const ForgotPassword = () => {

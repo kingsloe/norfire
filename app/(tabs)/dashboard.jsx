@@ -50,19 +50,19 @@ const DATA = [
       }
     ],
   },
-  {
-    title: 'Funeral Information',
-    data: [
-      {
-        title: 'Add Funeral',
-        link: 'addFuneral',
-      },
-      // {
-      //   title: 'View Funerals',
-      //   link: 'viewFunerals',
-      // },
-    ],
-  },
+  // {
+  //   title: 'Funeral Information',
+  //   data: [
+  //     {
+  //       title: 'Add Funeral',
+  //       link: 'addFuneral',
+  //     },
+  //     // {
+  //     //   title: 'View Funerals',
+  //     //   link: 'viewFunerals',
+  //     // },
+  //   ],
+  // },
   {
     title: 'Funeral Fees',
     data: [

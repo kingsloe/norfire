@@ -13,7 +13,7 @@ const { height } = Dimensions.get('window');
 
 
 const MakePayment = () => {
-    const { id } = useLocalSearchParams();
+    const params = useLocalSearchParams();
     const [userId, setUserId] = useState('');
     const [subFamilyId, setSubFamilyId] = useState('');
     const [amount, setAmount] = useState('');
@@ -36,8 +36,7 @@ const MakePayment = () => {
         }
         const fetchSubFamily = async () => {
             try {
-                const fetchedMemberDetails = await getSingleDocument(id, 'familyMembers');
-                console.log(fetchedMemberDetails.balance)
+                const fetchedMemberDetails = await getSingleDocument(params.id, 'familyMembers');
                 setSubFamilyId(fetchedMemberDetails.subFamily);
                 setInitialBalance(fetchedMemberDetails.balance);
                 if (fetchedMemberDetails.gender == 'male') {
@@ -64,7 +63,6 @@ const MakePayment = () => {
                 const currentBalance = parseInt(amount) + parseInt(initialBalance);
                 setBalance(currentBalance);
             }
-           
         } catch (error) {
             console.error('Failed to update balance', error);
         }
@@ -81,8 +79,9 @@ const MakePayment = () => {
     const handleSubmit = async () => {
         const payload = {
             userId : userId,
-            familyMemberId : id,
+            familyMemberId : params.id,
             subFamilyId : subFamilyId,
+            funeralId : params.funeralId,
             amount : parseInt(form.amount),
             balance : parseInt(balance),
             createdAt : serverTimestamp(),
@@ -92,7 +91,7 @@ const MakePayment = () => {
             if (validateFields()) {
                 setLoading(true);
                 const response = await addDoc(collection(FIREBASE_FIRESTORE, 'fees'), payload);
-                const targetDocument = doc(FIREBASE_FIRESTORE, 'familyMembers', id);
+                const targetDocument = doc(FIREBASE_FIRESTORE, 'familyMembers', params.id);
                 const sending = await updateDoc(targetDocument, {
                     balance: parseInt(balance)
                 })
@@ -100,6 +99,7 @@ const MakePayment = () => {
                     userId : '',
                     familyMemberId : '',
                     subFamilyId : '',
+                    funeralId : '',
                     amount : '',
                     balance : ''
                 });

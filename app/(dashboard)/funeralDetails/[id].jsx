@@ -6,7 +6,7 @@ import {
     StyleSheet, 
     SectionList, 
     TouchableOpacity, 
-    Button 
+    Button
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import FeatherIcon from '@expo/vector-icons/Feather';
@@ -94,12 +94,32 @@ export default function FuneralDetails() {
             ))}
             <Text style={{ marginTop: 16, marginBottom: 10, marginLeft: 16, color: '#64748b', fontWeight: 'bold'}}>Payments</Text>
             <View style={styles.cardWrapper}>
-                <TouchableOpacity onPress={() => 
-                    router.push('../membersToMakePayment')
-                }>
+                <TouchableOpacity onPress={() => {
+                    router.push(`../membersToMakePayment?funeralId=${id}`)
+                }}>
                     <View style={styles.card}>
                         <View style={styles.cardBody}>
                             <Text style={styles.cardTitle}>Make Payments</Text>
+                        </View>
+
+                        <View style={styles.cardAction}>
+                            <Text style={styles.cardInfo}>Click Here</Text>
+                            <FeatherIcon
+                              color="#9ca3af"
+                              name="chevron-right"
+                              size={22} 
+                            />
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.cardWrapper}>
+                <TouchableOpacity onPress={() => 
+                    router.push(`../paymentHistory?funeralId=${id}`)
+                }>
+                    <View style={styles.card}>
+                        <View style={styles.cardBody}>
+                            <Text style={styles.cardTitle}>View Payments</Text>
                         </View>
 
                         <View style={styles.cardAction}>

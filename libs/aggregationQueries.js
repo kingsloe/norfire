@@ -221,6 +221,39 @@ const getFuneralFees = async () => {
     }
 }
 
+
+const getPaymentHistory = async (funeralId) => {
+    try {
+        const targetDocument = await getDocs (
+            query (
+                collection(FIREBASE_FIRESTORE, 'fees'),
+                where('funeralId' , '==', funeralId)
+            ))
+        const history = targetDocument.docs.map(doc => ({
+            id: doc.id,
+            funeralId: doc.data().funeralId,
+            familyMemberId: doc.data().familyMemberId,
+            subFamilyId: doc.data().subFamilyId,
+            amount: doc.data().amount,
+            balance: doc.data().balance
+        }));
+        return history;
+
+    }catch (error) {
+        console.error ('Failed to get Payment History', error);
+    }
+}
+
+// const getSinglePayment = async (paymentId) => {
+//     try {
+//         const targetDocument = await getDoc (
+//             doc(FIREBASE_FIRESTORE, 'fees', paymentId)
+//         )
+//     } catch (error) {
+//         console.error ('Failed to get the single payment: ', error);
+//     }
+// }
+
 export { 
     getAliveAndDeadMembers, 
     getMembersByPosition, 
@@ -233,5 +266,6 @@ export {
     getSingleDocument,
     getFunerals,
     getFuneralFeesByGender,
-    getFuneralFees
+    getFuneralFees,
+    getPaymentHistory
 };

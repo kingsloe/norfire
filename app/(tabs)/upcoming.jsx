@@ -14,6 +14,7 @@ import { router } from 'expo-router';
 import FeatherIcon from '@expo/vector-icons/Feather';
 import {StatusBar} from 'expo-status-bar';
 import { getFunerals, getDeadMembers } from '../../libs/aggregationQueries';
+import { AntDesign } from '@expo/vector-icons';
 
 const Upcoming = () => {
     const [funeralList, setFuneralList] = useState([]);
@@ -148,6 +149,11 @@ const Upcoming = () => {
             <Text style={styles.searchEmpty}>No results</Text>
           )}
         </ScrollView>
+
+        <TouchableOpacity style={styles.fab} onPress={() => router.push('../(dashboard)/addFuneral')}>
+        <AntDesign name="plus" size={24} color="white" />
+      </TouchableOpacity>
+
       </View>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -252,5 +258,21 @@ const styles = StyleSheet.create({
   },
   cardAction: {
     paddingRight: 16,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#e09b5e",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5, // For Android shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3, // For iOS shadow
   },
 });

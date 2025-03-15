@@ -32,8 +32,22 @@ const DashboardLayout = () => {
                 headerShown: false, 
                 headerTitle: 'Fee Payers', 
                 headerTitleAlign: 'center',
+            }}/>            
+            <Stack.Screen name='makePayment' options={{
+                headerShown: true, 
+                headerTitle: 'Payment', 
+                headerTitleAlign: 'center'
+            }} />
+            <Stack.Screen name='paymentHistory' options={{
+                headerShown: false,
+                headerTitle: 'Payment History',
+                headerTitleAlign: 'center'
             }}/>
-            <Stack.Screen name='makePayment' options={{headerShown: true, headerTitle: 'Payment', headerTitleAlign: 'center'}} />
+            <Stack.Screen name='updatePayment' options={{
+                headerShown: false,
+                headerTitle: 'Update Payment',
+                headerTitleAlign: 'center'
+            }}/>
         </Stack>
     )
 }

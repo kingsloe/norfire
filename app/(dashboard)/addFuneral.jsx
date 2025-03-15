@@ -117,7 +117,6 @@ const AddFuneral = () => {
             accumulator[currentValue.gender] = currentValue.amount;
             return accumulator
         }, {})
-        console.log(funeralFeesList);
         const payload = {
             creatorId: creatorId,
             deadMember: form.deadMember,
@@ -135,7 +134,7 @@ const AddFuneral = () => {
 
                 const batch = writeBatch(FIREBASE_FIRESTORE);
                 familyMembers.forEach((doc) => {
-                    console.log('Balance: '+doc.balance);
+                    // console.log('Balance: '+doc.balance);
                     if (doc.gender === 'male') {
                     batch.update(
                         doc.memberRef, 
@@ -148,7 +147,7 @@ const AddFuneral = () => {
                     }
                 });
                 await batch.commit();
-                console.log('Successfully updated members')
+                // console.log('Successfully updated members')
 
                 setForm({
                     creatorId: '',
