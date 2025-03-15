@@ -244,15 +244,25 @@ const getPaymentHistory = async (funeralId) => {
     }
 }
 
-// const getSinglePayment = async (paymentId) => {
-//     try {
-//         const targetDocument = await getDoc (
-//             doc(FIREBASE_FIRESTORE, 'fees', paymentId)
-//         )
-//     } catch (error) {
-//         console.error ('Failed to get the single payment: ', error);
-//     }
-// }
+
+const getTotalPayments = async (funeralId) => {
+  try {
+    const paymentsRef = collection(FIREBASE_FIRESTORE, "fees");
+    const q = query(paymentsRef, where("funeralId", "==", funeralId));
+    const querySnapshot = await getDocs(q);
+
+    let totalAmount = 0;
+    querySnapshot.forEach((doc) => {
+      totalAmount += doc.data().amount;
+    });
+
+    return totalAmount;
+  } catch (error) {
+    console.error("Error fetching payments:", error);
+    return 0;
+  }
+};
+
 
 export { 
     getAliveAndDeadMembers, 
@@ -267,5 +277,6 @@ export {
     getFunerals,
     getFuneralFeesByGender,
     getFuneralFees,
-    getPaymentHistory
+    getPaymentHistory,
+    getTotalPayments
 };

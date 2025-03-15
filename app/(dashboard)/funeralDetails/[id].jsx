@@ -13,7 +13,7 @@ import FeatherIcon from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getSingleDocument } from '../../../libs/aggregationQueries';
+import { getSingleDocument, getTotalPayments } from '../../../libs/aggregationQueries';
 
 export default function FuneralDetails() {
     const { id } = useLocalSearchParams();
@@ -21,14 +21,18 @@ export default function FuneralDetails() {
     const [fields, setFields] = useState([]);
     const [deadMember, setDeadMember] = useState('');
     const [loading, setLoading] = useState(true);
+    const [totalPayments, setTotalPayments] = useState(0);
 
     useEffect(() => {
         const fetchMemberDetails = async () => {
             try {
                 const funeralDetails = await getSingleDocument(id, 'funeral');
                 setFuneral(funeralDetails);
-                const deadMember = await getSingleDocument(funeralDetails.deadMember, 'familyMembers')
-                setDeadMember(deadMember)
+                const deadMember = await getSingleDocument(funeralDetails.deadMember, 'familyMembers');
+                setDeadMember(deadMember);
+                const totalPayments = await getTotalPayments(id);
+                console.log(totalPayments)
+                setTotalPayments(totalPayments);
             } catch (error) {
                 console.error('Error fetching funeral details:', error);
             } finally {
@@ -50,11 +54,12 @@ export default function FuneralDetails() {
                 },
                 { label: "Funeral Type", value: funeral.funeralType },
                 { label: "Is Active", value: funeral.isActive ? "✔️" : "❌"},
+                { label: "Amount Taken", value: totalPayments},
             ]);
         } catch (error) {
             console.error('Failed to set fields to value', error);
         }
-    }, [funeral, deadMember]);
+    }, [funeral, deadMember, totalPayments]);
 
     if (loading) {
         return <ActivityIndicator size="large" style={{marginTop: 34}}/>;
